@@ -84,6 +84,8 @@ class GamingLink : FluxLinkProvider() {
             putStringArray("names", games.map { it.first.name }.toTypedArray())
             putStringArray("packages", games.map { it.first.packages.joinToString(",") }.toTypedArray())
             putStringArray("launches", games.map { it.second.toUri(Intent.URI_INTENT_SCHEME) }.toTypedArray())
+            // Each game's own start (its app's, a launcher's or an emulator's), as it's set up
+            putStringArray("own", games.map { it.first.launch.orEmpty() }.toTypedArray())
             putLongArray("art", games.map { runCatching { GameArt.coverVersion(context, it.first) }.getOrDefault(0L) }.toLongArray())
             putIntArray("streamHeights", games.map { runCatching { GameProfiles.effective(context, it.first).streamHeight }.getOrNull() ?: 0 }.toIntArray())
             // Xbox Cloud Gaming's library, as one entry: Flux Gaming's own player, opened through its launcher

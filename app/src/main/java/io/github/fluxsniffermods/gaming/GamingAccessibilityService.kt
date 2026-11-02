@@ -25,6 +25,8 @@ class GamingAccessibilityService : AccessibilityService() {
         try {
             val pkg = event.packageName?.toString() ?: return
             val className = event.className?.toString()
+            // Flux Streaming's page for the TV's screen: the game is on the TV, still in front there
+            if (FrontApp.streamPage(pkg, className)) return
             // A window that isn't an app's own screen (a widget updating, recents) counts only
             // once Android confirms what's in front; one floating over the app keeps the app's
             val confirmed = isActivity(pkg, className)

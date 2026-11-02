@@ -55,6 +55,7 @@ internal object FrontApp {
             worker.execute {
                 if (!AdbShell.available()) return@execute
                 val resumed = resumedActivity()
+                if (resumed != null && streamPage(resumed.first, lastResumedClass)) return@execute
                 val front = resumed?.first ?: if (needsConfirming) return@execute else packageName
                 if (front in IGNORED || front in quickstep(app)) return@execute
                 // Another app's screen inside the app in front's own task (a purchase, a sign-in):
@@ -96,12 +97,17 @@ internal object FrontApp {
         recentsWatch = null
     }
 
-    private val resumed = Regex("(?:topResumedActivity|mResumedActivity|ResumedActivity)[^\\n]*?\\s([\\w.]+)/[^\\s}]*(?:\\s+t(\\d+))?")
+    private val resumed = Regex("(?:topResumedActivity|mResumedActivity|ResumedActivity)[^\\n]*?\\s([\\w.]+)/([^\\s}]*)(?:\\s+t(\\d+))?")
+    @Volatile private var lastResumedClass: String? = null
+
+    /** Flux Streaming's page for the TV's screen: never the app in front (the game on the TV is). */
+    fun streamPage(pkg: String, className: String?): Boolean =
+        pkg == io.github.fluxsniffermods.core.FluxApp.STREAMING.packageName && className?.endsWith("ExtraScreenActivity") == true
 
     /** The package of the activity Android has resumed, asked through the shell. */
     fun resumedPackage(): String? = resumedActivity()?.first
 
     private fun resumedActivity(): Pair<String, Int?>? =
         AdbShell.run("dumpsys activity activities | grep -m 2 -E 'topResumedActivity|mResumedActivity'", 2_000)
-            ?.let { dump -> resumed.find(dump)?.let { it.groupValues[1] to it.groupValues[2].toIntOrNull() } }
+            ?.let { dump -> resumed.find(dump)?.let { lastResumedClass = it.groupValues[2]; it.groupValues[1] to it.groupValues[3].toIntOrNull() } }
 }
