@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Placing keys over a game's own on-screen controls -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- The games: every launchable app (for its launchers and emulators), and the home screen -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.HOME" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".GamingApp"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Flux">
+
+        <!-- Games: every game, each started as its home screen shortcut starts it (Moonlight opens it too) -->
+        <activity
+            android:name=".GamesActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".GameSettingsActivity"
+            android:exported="false" />
+        <!-- One game's or app's gaming mode settings, on their own -->
+        <activity
+            android:name=".GameEditActivity"
+            android:exported="false"
+            android:excludeFromRecents="true" />
+        <!-- A game's home screen shortcut, and how Flux Streaming and the shell open games -->
+        <activity
+            android:name=".GameLaunchActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density|keyboard|keyboardHidden|navigation|uiMode"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- Xbox Cloud Gaming in Flux Gaming's own player (sizes change while it plays: kept) -->
+        <activity
+            android:name=".XboxPlayActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"
+            android:taskAffinity="io.github.fluxsniffermods.fluxgaming.xbox"
+            android:label="Xbox Cloud Gaming"
+            android:hardwareAccelerated="true"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density|keyboard|keyboardHidden|navigation|uiMode"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+
+        <!-- Gaming mode's keys, before the app gets them, and the app in front -->
+        <service
+            android:name=".GamingAccessibilityService"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/gaming_accessibility_service" />
+        </service>
+
+        <!-- Quick Settings: gaming mode on or off; a long-press opens its settings -->
+        <service
+            android:name=".GamingTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_qs_gaming"
+            android:label="@string/game_mode_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+                android:value="true" />
+        </service>
+        <activity
+            android:name=".GamingTileSettingsActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+            </intent-filter>
+        </activity>
+
+        <!-- Gaming mode's notification: the next profile, placing keys -->
+        <receiver
+            android:name=".GameMode$Receiver"
+            android:exported="false" />
+
+        <!-- The other Flux apps' way in: the keyboard's typing, Flux Streaming's games and stream -->
+        <provider
+            android:name=".GamingLink"
+            android:authorities="${applicationId}.link"
+            android:exported="true"
+            android:permission="io.github.fluxsniffermods.permission.LINK" />
+    </application>
+</manifest>

@@ -1,0 +1,10 @@
+{
+  "title": "Flux Gaming",
+  "highlights": [
+    {
+      "text": "Flux Gaming is an app of its own: gaming mode and the Games app moved out of Flux Titan Hub, with their own updates and About page. Your games and profiles come along from Flux Keyboard once it's updated. Gaming mode reads the keys through its own accessibility service (switch it on once), Flux Keyboard tells it when you type in a game, and Flux Streaming streams your games with their art.",
+      "after": "202611021724"
+    }
+  ],
+  "releases": {}
+}
