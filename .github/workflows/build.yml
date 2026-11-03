@@ -1,6 +1,6 @@
-name: Flux build
+name: Flux Gaming build
 # Each run is named by its version (or its kind, when the version is worked out)
-run-name: ${{ inputs.version_name || (github.ref_name == 'flux-release' && 'release' || 'dev build') }}
+run-name: Flux Gaming ${{ inputs.version_name || (github.ref_name == 'flux-release' && 'release' || 'dev build') }}
 
 # Pick the branch to pick the kind of build:
 #   flux-release -> a full release (1.0): the newest version in whats_new.json's "releases"
