@@ -59,10 +59,14 @@ internal object GameLauncher : ExtraScreen.Launcher {
 internal object FluxLinkTopics {
     @Volatile private var lastKeys: Boolean? = null
 
+    @Volatile private var lastPlayer: Boolean? = null
+
     fun keysChanged(context: android.content.Context) {
         val now = GameMode.passesKeys()
-        if (now == lastKeys) return
+        val player = XboxPlayActivity.inFront
+        if (now == lastKeys && player == lastPlayer) return
         lastKeys = now
+        lastPlayer = player
         io.github.fluxsniffermods.core.link.FluxLink.changed(context, io.github.fluxsniffermods.core.link.LinkMethods.TOPIC_GAME_KEYS)
     }
 }

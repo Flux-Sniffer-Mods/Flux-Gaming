@@ -36,6 +36,14 @@ git clone --recurse-submodules https://github.com/Flux-Sniffer-Mods/Flux-Gaming
 
 `core/` is [Flux Core](https://github.com/Flux-Sniffer-Mods/Flux-Core), what the Flux apps share.
 
+## Credits
+
+Gaming mode names Wii, GameCube and 3DS games from [GameTDB](https://www.gametdb.com)'s lists of
+game titles, fetched when a game folder is first read, and shows their covers from GameTDB too, or
+box art from [libretro-thumbnails](https://github.com/libretro-thumbnails) for other emulator games.
+Builds given a SteamGridDB API key (the `STEAMGRIDDB_API_KEY` Actions secret) look on
+[SteamGridDB](https://www.steamgriddb.com) first.
+
 ## License
 
 GPL-3.0. What changed: [CHANGES.md](CHANGES.md).

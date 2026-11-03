@@ -335,7 +335,7 @@ class XboxPlayActivity : Activity() {
          */
         @Volatile
         var inFront = false
-            private set
+            private set(value) { field = value; GameMode.onKeysChanged?.invoke() }
 
         private const val KEY_PLAYED = "xbox_played_"
 

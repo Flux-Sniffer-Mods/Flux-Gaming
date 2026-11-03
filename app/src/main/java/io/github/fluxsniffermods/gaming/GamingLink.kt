@@ -30,6 +30,8 @@ class GamingLink : FluxLinkProvider() {
                 putBoolean("keys", GameMode.passesKeys())
                 putBoolean("sendsKeys", GameMode.sendsKeys())
                 putBoolean("enabled", GameProfiles.enabled(context))
+                // Flux Gaming's own Xbox player in front: its fields' keys and text are its own
+                putBoolean("player", XboxPlayActivity.inFront)
             }
             LinkMethods.GAME_LAYOUT -> Bundle().apply {
                 val controls = FluxLayout.Control.entries
